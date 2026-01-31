@@ -5,6 +5,9 @@ pipeline {
         jdk 'jdk-21'
         maven 'maven-3.9'
     }
+     environment {
+            SONAR_SCANNER_HOME = tool 'sonar-scanner'
+        }
 
     stages {
 
@@ -25,6 +28,26 @@ pipeline {
                 }
             }
         }
+         stage('SonarQube Analysis') {
+                    steps {
+                        withSonarQubeEnv('SonarQube') {
+                            sh """
+                              mvn sonar:sonar \
+                              -Dsonar.projectKey=jenkins-demo \
+                              -Dsonar.projectName=jenkins-demo \
+                              -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+                            """
+                        }
+                    }
+                }
+
+                stage('Quality Gate') {
+                    steps {
+                        timeout(time: 2, unit: 'MINUTES') {
+                            waitForQualityGate abortPipeline: true
+                        }
+                    }
+                }
 
         stage('Build') {
             steps {
@@ -42,3 +65,5 @@ pipeline {
         }
     }
 }
+
+#squ_fc108a33dfeed186c00758eed063447d1e86bd2f
