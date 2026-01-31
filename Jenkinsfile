@@ -65,5 +65,3 @@ pipeline {
         }
     }
 }
-
-#squ_fc108a33dfeed186c00758eed063447d1e86bd2f
