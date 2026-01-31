@@ -17,4 +17,9 @@ class DemoJenkinsApplicationTests {
         StepVerifier.create(demoController.hello()).expectNext("hello").verifyComplete();
 	}
 
+	@Test
+	void testMainClass(){
+		DemoJenkinsApplication.main(new String[]{});
+	}
+
 }
